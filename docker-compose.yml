@@ -12,6 +12,12 @@ services:
       - mariadb
     networks:
       - default
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
   mariadb:
     image: mariadb:10
@@ -29,6 +35,12 @@ services:
       - "3306:3306"
     networks:
       - default
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
   phpmyadmin:
     image: phpmyadmin
