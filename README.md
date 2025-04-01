@@ -75,10 +75,11 @@ If you change the php.ini file, you need to rebuild the container command `docke
   opcache
   zip
   gd
+  intl
 ```
 
 To add other php modules, you need to edit the `./build/php/Dockerfile` file and rebuild the container.
-(I have enabled by default the minimum set of modules required for OpenCart)
+(I have enabled by default the minimum set of modules required for Prestashop)
 
 ## License
 
