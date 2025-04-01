@@ -1,0 +1,48 @@
+services:
+  www:
+    build: './build/php'
+    restart: unless-stopped
+    container_name: www
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./data/apache/logs:/var/log/apache2
+    depends_on:
+      - mariadb
+    networks:
+      - default
+
+  mariadb:
+    image: mariadb:10
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - "./build/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+      - "./data/mariadb:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    networks:
+      - default
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - mariadb
+
+networks:
+  default:
+    driver: bridge
